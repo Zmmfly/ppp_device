@@ -5,6 +5,9 @@ path = [cwd + '/inc']
 src  = Glob('src/*.c')
 src += Glob('samples/ppp_sample.c')
 
+if GetDepend(['PPP_DEVICE_USING_ML302']):
+    src += Glob('class/ppp_device_ml302.c')
+
 # Air720
 if GetDepend(['PPP_DEVICE_USING_AIR720']):
     src += Glob('class/ppp_device_air720.c')

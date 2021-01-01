@@ -11,7 +11,9 @@
 #ifndef __PPP_DEVICE_H__
 #define __PPP_DEVICE_H__
 
+#include <rtthread.h>
 #include <rtdef.h>
+#include <at.h>
 
 #include <netif/ppp/ppp.h>
 #include <netif/ppp/pppos.h>
@@ -69,6 +71,7 @@ struct ppp_device
 {
     struct rt_device parent;                    /* join rt_device frame */
     rt_device_t uart;                           /* low-level uart device object */
+    at_client_t at;                             /* AT Client */
     const struct ppp_device_ops *ops;           /* ppp device ops interface */
     enum ppp_conn_type conn_type;               /* using usb or uart */
     rt_base_t power_pin;                        /* power pin, if device need hardware reset */
@@ -111,5 +114,7 @@ typedef  rt_err_t (*uart_rx_cb)(rt_device_t dev, rt_size_t size);
 int ppp_device_register(struct ppp_device *ppp_device, const char *dev_name, const char *uart_name, void *user_data);
 int ppp_device_attach(struct ppp_device *ppp_device, const char *uart_name, void *user_data);
 int ppp_device_detach(struct ppp_device *ppp_device);
-
+static rt_err_t ppp_device_rx_ind(rt_device_t dev, rt_size_t size);
+int ppp_device_at_enable(struct ppp_device *dev);
+int ppp_device_at_disable(struct ppp_device *dev);
 #endif /* __PPP_DEVICE_H__ */
